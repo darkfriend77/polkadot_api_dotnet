@@ -86,7 +86,7 @@ namespace Polkadot.DataStructs.Metadata
                 var modules = md.Module;
                 for (var ind = 0; ind < modules.Length; ind++)
                 {
-                    if (modules[ind].Name.Equals(moduleName, StringComparison.InvariantCultureIgnoreCase))
+                    if (modules[ind].Name.Equals(moduleName, StringComparison.InvariantCulture))
                     {
                         moduleIndex = ind;
                         break;
@@ -103,7 +103,7 @@ namespace Polkadot.DataStructs.Metadata
                 var md = _metadata as MetadataV4;
                 foreach (var module in md.Module.Select((item, ind) => new { item, ind }))
                 {
-                    if (module.item.Name.Equals(moduleName, StringComparison.InvariantCultureIgnoreCase))
+                    if (module.item.Name.Equals(moduleName, StringComparison.InvariantCulture))
                     {
                         moduleIndex = module.ind;
                         break;
