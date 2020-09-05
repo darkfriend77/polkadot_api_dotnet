@@ -17,7 +17,7 @@ namespace PolkaTest
             //var accountIdBytes = SimpleBase.Base58.Bitcoin.Decode(accountId).ToArray();
             //int accountIdBytesLen = accountIdBytes.Length;
             //Assert.Equal("", Converters.ToHexString(accountIdBytes));
-            string addressHexPrefixed = "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
+            var addressHexPrefixed = "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
             var addressBytes = Converters.HexToByteArray(addressHexPrefixed);
             Assert.Equal(addressHexPrefixed, Converters.ToPrefixedHexString(addressBytes), ignoreCase: true);
 

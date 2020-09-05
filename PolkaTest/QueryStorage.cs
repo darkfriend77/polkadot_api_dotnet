@@ -38,7 +38,7 @@ namespace PolkaTest
         {
             using (IApplication app = PolkaApi.GetApplication())
             {
-                app.Connect();
+                app.Connect("wss://boot.worldofmogwais.com/");
                 // Get the most recent block number and hash
                 var lastblock = app.GetBlock(null);
                 var lastNumber = lastblock.Block.Header.Number;

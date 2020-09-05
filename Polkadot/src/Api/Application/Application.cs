@@ -56,6 +56,8 @@ namespace Polkadot.Api
         private bool _isEpoch; // True, if epochs should be used instead of sessions
         private Lazy<IBinarySerializer> _serializer;
 
+        public IJsonRpc GetIJsonRpc => _jsonRpc;
+
         public TimeSpan RequestsTimeout { get; set; } = TimeSpan.FromSeconds(Consts.RESPONSE_TIMEOUT_S);
 
         private T Deserialize<T, C>(JObject json)
