@@ -357,7 +357,7 @@ namespace Polkadot.Api
             }
             else
             {
-                throw new ApplicationException("Parameter requered");
+                throw new ApplicationException("Parameter required");
             }
 
             return $"0x{key}";

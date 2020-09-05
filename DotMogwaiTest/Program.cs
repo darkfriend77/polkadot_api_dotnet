@@ -29,11 +29,14 @@ namespace TestDMogApi
                 //var something = app.GetStorage("TemplateModule", "Something");
                 //Console.WriteLine($"Something: {something}");
 
-                var allMogwaisCount = app.GetStorage("Dmog", "AllMogwaisCount");
-                Console.WriteLine($"all mogwais count: {allMogwaisCount}");
+                //var allMogwaisCount = app.GetStorage("Dmog", "AllMogwaisCount");
+                //Console.WriteLine($"all mogwais count: {allMogwaisCount}");
 
                 //var allMogwaisCount = app.GetStorage("Balances", "TotalIssuance");
                 //Console.WriteLine($"all mogwais count: {allMogwaisCount}");
+
+                var result = app.GetStorage("5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY", "Balances", "Account");
+                Console.WriteLine($"result: {result}");
 
                 app.Disconnect();
             }

@@ -2,6 +2,7 @@
 {
     public enum Hasher
     {
-        XXHASH, BLAKE2
+        XXHASH, BLAKE2,
+        BLAKE2_128_CONCAT
     }
 }
