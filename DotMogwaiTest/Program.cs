@@ -36,6 +36,9 @@ namespace TestDMogApi
                 //var allMogwaisCount = app.GetStorage("Dmog", "AllMogwaisCount");
                 //Console.WriteLine($"all mogwais count: {allMogwaisCount}");
 
+                //var result = app.GetStorage("Dmog", "Nonce");
+                //Console.WriteLine($"Nonce: {result}");
+
                 //var allMogwaisCount = app.GetStorage("Balances", "TotalIssuance");
                 //Console.WriteLine($"all mogwais count: {allMogwaisCount}");
 
@@ -47,45 +50,85 @@ namespace TestDMogApi
                 //Console.WriteLine($"result: {AddressUtils.GetAddrFromPublicKey(new PublicKey() { Bytes = Converters.HexToByteArray(resultObject.Value<string>("result")) })}");             
 
 
-                var _protocolParams = app.GetProtocolParameters();
-                var _serializer = app.Serializer;
-                string module = "Dmog";
-                string variable = "OwnedMogwaisCount";
-                string key;
-                key = _protocolParams.Metadata.GetPlainStorageKey(_protocolParams.FreeBalanceHasher, module, _serializer);
-                key += _protocolParams.Metadata.GetPlainStorageKey(_protocolParams.FreeBalanceHasher, variable, _serializer);
+                //AddressMappTest(app);
+                //HashFunctionTest(app);
 
-                /***
-                 * Rätsel für Rene
-                 * ---------------
-                 * string accountId = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
-                 * var addressHexPrefixed = SS58.Encode(accountId);
-                 */
-                var addressHexPrefixed = "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
-                var addressBytes = Converters.HexToByteArray(addressHexPrefixed);
-                var addressBytesBlake2Concat = Hash.GetStorageKey(Hasher.BLAKE2_128_CONCAT, addressBytes, addressBytes.Length, _serializer);
-                key += Converters.ToHexString(addressBytesBlake2Concat);
-                //key += "de1e86a9a8c739864cf3cc5ec2bea59fd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
 
-                Console.WriteLine($"#######################################################################################");
-                Console.WriteLine($"- CURL - ##############################################################################");
-                Console.WriteLine($"#######################################################################################");
-                Console.WriteLine("curl -H \"Content-Type: application/json\" -d '{\"id\":1, \"jsonrpc\":\"2.0\", \"method\": \"state_getStorage\", \"params\": [\"0x" + key + "\"]}' http://localhost:9933");
-                Console.WriteLine();
-                Console.WriteLine($"#######################################################################################");
-                Console.WriteLine($"- JSON - ##############################################################################");
-                Console.WriteLine($"#######################################################################################");
 
-                JObject query = new JObject { { "method", "state_getStorage" }, { "params", new JArray { $"0x{key}" } } };
-                Console.WriteLine(query.ToString());
-                JObject response = (app as Application).GetIJsonRpc.Request(query);
-                Console.WriteLine(response["result"].ToString());
-                Console.WriteLine();
 
                 app.Disconnect();
             }
 
             Console.ReadKey();
+        }
+
+        private static void HashFunctionTest(IApplication app)
+        {
+            var _protocolParams = app.GetProtocolParameters();
+            var _serializer = app.Serializer;
+            string module = "Dmog";
+            string variable = "MogwaiOwner";
+            string key;
+            key = _protocolParams.Metadata.GetPlainStorageKey(_protocolParams.FreeBalanceHasher, module, _serializer);
+            key += _protocolParams.Metadata.GetPlainStorageKey(_protocolParams.FreeBalanceHasher, variable, _serializer);
+            var addressHexPrefixed = "0xad35415cb5b574819c8521b9192fffda772c0770fed9a55494293b2d728f104c";
+            var addressBytes = Converters.HexToByteArray(addressHexPrefixed);
+            key += Converters.ToHexString(addressBytes);
+
+            //Console.WriteLine($"#######################################################################################");
+            //Console.WriteLine($"- CURL - ##############################################################################");
+            //Console.WriteLine($"#######################################################################################");
+            //Console.WriteLine("curl -H \"Content-Type: application/json\" -d '{\"id\":1, \"jsonrpc\":\"2.0\", \"method\": \"state_getStorage\", \"params\": [\"0x" + key + "\"]}' http://localhost:9933");
+            //Console.WriteLine();
+
+            Console.WriteLine($"#######################################################################################");
+            Console.WriteLine($"- JSON - ##############################################################################");
+            Console.WriteLine($"#######################################################################################");
+
+            JObject query = new JObject { { "method", "state_getStorage" }, { "params", new JArray { $"0x{key}" } } };
+            JObject response = (app as Application).GetIJsonRpc.Request(query);
+            //Console.WriteLine(response["result"].ToString());
+            Console.WriteLine($"#######################################################################################");
+        }
+
+        private static void AddressMappTest(IApplication app)
+        {
+            var _protocolParams = app.GetProtocolParameters();
+            var _serializer = app.Serializer;
+            string module = "Dmog";
+            string variable = "OwnedMogwaisCount";
+            string key;
+            key = _protocolParams.Metadata.GetPlainStorageKey(_protocolParams.FreeBalanceHasher, module, _serializer);
+            key += _protocolParams.Metadata.GetPlainStorageKey(_protocolParams.FreeBalanceHasher, variable, _serializer);
+
+            /***
+             * Rätsel für Rene
+             * ---------------
+             * string accountId = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
+             * var addressHexPrefixed = SS58.Encode(accountId);
+             */
+            var test = new Address("5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY").GetTypeEncoded(app.Serializer).ToPrefixedHexString();
+            Console.WriteLine(test);
+            var addressHexPrefixed = "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
+            var addressBytes = Converters.HexToByteArray(addressHexPrefixed);
+            var addressBytesBlake2Concat = Hash.GetStorageKey(Hasher.BLAKE2_128_CONCAT, addressBytes, addressBytes.Length, _serializer);
+            key += Converters.ToHexString(addressBytesBlake2Concat);
+            //key += "de1e86a9a8c739864cf3cc5ec2bea59fd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
+
+            Console.WriteLine($"#######################################################################################");
+            Console.WriteLine($"- CURL - ##############################################################################");
+            Console.WriteLine($"#######################################################################################");
+            Console.WriteLine("curl -H \"Content-Type: application/json\" -d '{\"id\":1, \"jsonrpc\":\"2.0\", \"method\": \"state_getStorage\", \"params\": [\"0x" + key + "\"]}' http://localhost:9933");
+            Console.WriteLine();
+            Console.WriteLine($"#######################################################################################");
+            Console.WriteLine($"- JSON - ##############################################################################");
+            Console.WriteLine($"#######################################################################################");
+
+            JObject query = new JObject { { "method", "state_getStorage" }, { "params", new JArray { $"0x{key}" } } };
+            Console.WriteLine(query.ToString());
+            JObject response = (app as Application).GetIJsonRpc.Request(query);
+            Console.WriteLine(response["result"].ToString());
+            Console.WriteLine();
         }
 
         private static void GetMetaData(IApplication app)
@@ -116,7 +159,7 @@ namespace TestDMogApi
 
                     foreach (var item in storage11.Items)
                     {
-                        Console.WriteLine($"- Item[{item.Name},type:[{item.Type.Type},{item.Type.Hasher},{item.Type.Key1},{item.Type.Key2},{item.Type.Value},{item.Type.Key2hasher},{item.Type.IsLinked}],mod:{item.Modifier}]");
+                        Console.WriteLine($"- Item[{item.Name},Type:[{item.Type.Type},Hasher: {item.Type.Hasher}, Key1: {item.Type.Key1}, Key2: {item.Type.Key2}, Value: {item.Type.Value}, Key2Hasher: {item.Type.Key2hasher}, IsLinked: {item.Type.IsLinked}], mod:{item.Modifier}]");
                     }
                 }
 
