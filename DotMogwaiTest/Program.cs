@@ -111,7 +111,7 @@ namespace TestDMogApi
             Console.WriteLine(test);
             var addressHexPrefixed = "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
             var addressBytes = Converters.HexToByteArray(addressHexPrefixed);
-            var addressBytesBlake2Concat = Hash.GetStorageKey(Hasher.BLAKE2_128_CONCAT, addressBytes, addressBytes.Length, _serializer);
+            var addressBytesBlake2Concat = Hash.GetStorageKey(Hasher.BLAKE2_128CONCAT, addressBytes, addressBytes.Length, _serializer);
             key += Converters.ToHexString(addressBytesBlake2Concat);
             //key += "de1e86a9a8c739864cf3cc5ec2bea59fd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d";
 

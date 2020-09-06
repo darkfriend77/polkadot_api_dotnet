@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schnorrkel", "Schnorrkel\Sc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Polkadot.BinarySerializer", "Polkadot.BinarySerializer\Polkadot.BinarySerializer.csproj", "{22BAF944-5BC7-4DF9-9683-53B1F607A527}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotMogwaiTest", "DotMogwaiTest\DotMogwaiTest.csproj", "{DAAA68A4-15F6-4DE9-BC66-5226E7BF9014}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotMogwaiTest", "DotMogwaiTest\DotMogwaiTest.csproj", "{DAAA68A4-15F6-4DE9-BC66-5226E7BF9014}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubstrateMetadata", "SubstrateMetadata\SubstrateMetadata.csproj", "{74E50859-03C8-4B98-AD8E-17479A982425}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubstrateMetadataTest", "SubstrateMetadataTest\SubstrateMetadataTest.csproj", "{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +105,22 @@ Global
 		{DAAA68A4-15F6-4DE9-BC66-5226E7BF9014}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAAA68A4-15F6-4DE9-BC66-5226E7BF9014}.Release|x64.ActiveCfg = Release|Any CPU
 		{DAAA68A4-15F6-4DE9-BC66-5226E7BF9014}.Release|x64.Build.0 = Release|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Debug|x64.Build.0 = Debug|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Release|x64.ActiveCfg = Release|Any CPU
+		{74E50859-03C8-4B98-AD8E-17479A982425}.Release|x64.Build.0 = Release|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Debug|x64.Build.0 = Debug|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Release|x64.ActiveCfg = Release|Any CPU
+		{4AEDCDC3-5B49-4986-8F09-0C89A44861AD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
