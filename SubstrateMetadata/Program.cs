@@ -24,14 +24,27 @@ namespace SubstrateMetadata
 
             client.ConnectAsync();
             var result = client.RequestAsync("state_getMetadata");
+
+
+            var metaDataParser = new MetaDataParser(webSocketURL, result);
+            var metaData = metaDataParser.MetaData;
+
+            if (client.TryRequest(metaData, "Sudo", "Key", out object reqResult))
+            {
+                Console.WriteLine($"RESPONSE: {reqResult} [{reqResult.GetType().Name}]");
+            }
+            else
+            {
+
+            }
+
+
             client.Disconnect();
 
-            var metaData = new MetaDataParser(webSocketURL, result);
-            var md11 = metaData.Parse();
 
-            var md11serialized = JsonConvert.SerializeObject(md11, new StringEnumConverter());
 
-            Console.WriteLine(md11serialized);
+
+
         }
 
     }

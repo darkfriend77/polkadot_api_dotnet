@@ -2,38 +2,39 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlTypes;
+using System.Linq;
 using System.Numerics;
 using System.Reflection.Metadata;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace SubstrateMetadata
 {
     public class MetaDataParser
     {
-        private string substrateWebSocket;
+        private MetaData _md11;
 
-        private string metaDataString;
-        private byte[] m;
+        public MetaData MetaData => _md11;
 
-        public MetaDataParser(string substrateWebSocket, string metaData)
+        public MetaDataParser(string origin, string metaData)
         {
-            this.substrateWebSocket = substrateWebSocket;
-            this.metaDataString = metaData;
-            this.m = Utils.HexToByteArray(metaData);
+            Parse(origin, Utils.HexToByteArray(metaData));
         }
 
-        internal MetaDataV11 Parse()
+        internal MetaData Parse(string origin, byte[] m)
         {
             var p = 0;
 
-            var metaData = new MetaDataV11(substrateWebSocket);
-
-            metaData.Magic = Encoding.ASCII.GetString(new byte[] { m[p++], m[p++], m[p++], m[p++] });
-            metaData.Version = "v" + BitConverter.ToInt16(new byte[] { m[p++], 0x00 });
+            _md11 = new MetaData(origin)
+            {
+                Magic = Encoding.ASCII.GetString(new byte[] { m[p++], m[p++], m[p++], m[p++] }),
+                Version = "v" + BitConverter.ToInt16(new byte[] { m[p++], 0x00 })
+            };
 
             var mlen = DecodeCompactInteger(m, ref p);
 
-            metaData.Modules = new Module[(int)mlen.Value];
+            _md11.Modules = new Module[(int)mlen.Value];
             for (var modIndex = 0; modIndex < mlen.Value; modIndex++)
             {
                 var module = new Module
@@ -62,19 +63,25 @@ namespace SubstrateMetadata
                         item.Function = new Function
                         {
                             Hasher = (Storage.Hasher) (item.Type != Storage.Type.Plain ? BitConverter.ToInt16(new byte[] { m[p++], 0x00 }) : -1),
-                            Key1 = ExtractString(m, ref p)
+
                         };
 
-                        if (item.Type == Storage.Type.Map)
+                        switch (item.Type)
                         {
-                            item.Function.Value = ExtractString(m, ref p);
-                            item.Function.IsLinked = m[p++] != 0;
-                        }
-                        else if (item.Type == Storage.Type.DoubleMap)
-                        {
-                            item.Function.Key2 = ExtractString(m, ref p);
-                            item.Function.Value = ExtractString(m, ref p);
-                            item.Function.IsLinked = m[p++] != 0;
+                            case Storage.Type.Plain:
+                                item.Function.Value = ExtractString(m, ref p);
+                                break;
+                            case Storage.Type.Map:
+                                item.Function.Key1 = ExtractString(m, ref p);
+                                item.Function.Value = ExtractString(m, ref p);
+                                item.Function.IsLinked = m[p++] != 0;
+                                break;
+                            case Storage.Type.DoubleMap:
+                                item.Function.Key1 = ExtractString(m, ref p);
+                                item.Function.Key2 = ExtractString(m, ref p);
+                                item.Function.Value = ExtractString(m, ref p);
+                                item.Function.IsLinked = m[p++] != 0;
+                                break;
                         }
 
                         item.FallBack = Bytes2HexString(ExtractBytes(m, ref p));
@@ -197,22 +204,22 @@ namespace SubstrateMetadata
                     module.Errors[i] = err;
                 }
 
-                metaData.Modules[modIndex] = module;
+                _md11.Modules[modIndex] = module;
             }
 
             var eLen = DecodeCompactInteger(m, ref p);
             for (var i = 0; i < eLen.Value; i++)
             {
                 var itmLen = DecodeCompactInteger(m, ref p);
-                metaData.ExtrinsicExtensions = new string[(int)itmLen.Value];
+                _md11.ExtrinsicExtensions = new string[(int)itmLen.Value];
                 for (var j = 0; j < itmLen.Value; j++)
                 {
-                    metaData.ExtrinsicExtensions[j] = ExtractString(m, ref p);
+                    _md11.ExtrinsicExtensions[j] = ExtractString(m, ref p);
                 }
 
             }
 
-            return metaData;
+            return _md11;
         }
 
         public enum HexStringFormat { DASH, PREFIXED }

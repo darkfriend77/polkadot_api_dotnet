@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Tracing;
+﻿using System;
+using System.Diagnostics.Tracing;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
@@ -31,5 +32,20 @@ namespace SubstrateMetadata
 
         public string Prefix { get; internal set; }
         public Item[] Items { get; internal set; }
+
+        public bool TryGetStorageItemByName(string name, out Item result)
+        {
+            result = null;
+            foreach (Item item in Items)
+            {
+                if (item.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    result = item;
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

@@ -9,26 +9,41 @@ namespace SubstrateMetadata
 
     public class RequestGenerator
     {
-        public static string GetStorage(Module module, Item item, string parameter)
+        public static string GetStorage(Module module, Item item, string parameter = null)
         {
             var mBytes = Encoding.ASCII.GetBytes(module.Name);
             var iBytes = Encoding.ASCII.GetBytes(item.Name);
 
             var keybytes = HashExtension.XXHash128(mBytes).Concat(HashExtension.XXHash128(iBytes)).ToArray();
-            var key = BitConverter.ToString(keybytes).Replace("-", "");
+            var request = BitConverter.ToString(keybytes).Replace("-", "");
             
             switch (item.Type)
             {
                 case Storage.Type.Plain:
-                    break;
+                    return request;
                 case Storage.Type.Map:
-                    break;
+
+                    switch (item.Function.Hasher)
+                    {
+                        case Storage.Hasher.Identity:
+                            //keybytes.Concat(Utils.HexToByteArray(parameter)).;
+                            return "";
+                        case Storage.Hasher.Blake2_128:
+                        case Storage.Hasher.Blake2_256:
+                        case Storage.Hasher.Blake2_128Concat:
+                        case Storage.Hasher.Twox128:
+                        case Storage.Hasher.Twox256:
+                        case Storage.Hasher.Twox64Concat:
+                        case Storage.Hasher.None:
+                        default:
+                            break;
+                    }
+                    return "";
                 case Storage.Type.DoubleMap:
-                    break;
+                    return "";
+                default:
+                    return "";
             }
-
-            return key;
-
         }
     }
 }

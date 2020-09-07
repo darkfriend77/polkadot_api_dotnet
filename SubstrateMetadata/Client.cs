@@ -26,8 +26,6 @@ namespace SubstrateMetadata
             this.cts = new CancellationTokenSource();
         }
 
-
-
         internal void ConnectAsync()
         {
 
@@ -37,10 +35,55 @@ namespace SubstrateMetadata
             jsonRpc.StartListening();
         }
 
-        internal string RequestAsync(string methode, object param = null)
+        internal bool TryRequest(MetaData md, string v1, string v2, out object result)
+        {
+      
+            if (md.TryGetModuleByName(v1, out Module module) && module.Storage.TryGetStorageItemByName(v2, out Item item))
+            {
+                string method = "state_getStorage";
+                string parameters = "0x" + RequestGenerator.GetStorage(module, item);
+                string value = item.Function.Value;
+
+                Console.WriteLine($"Invoking request[{method}, params: {parameters}, value: {value}");
+                var resultString = RequestWithParamtersAsync(method, parameters);
+
+                switch (value)
+                {
+                    case "u16":
+                        result = BitConverter.ToUInt16(Utils.HexToByteArray(resultString));
+                        return true;
+                    case "u32":
+                        result = BitConverter.ToUInt32(Utils.HexToByteArray(resultString));
+                        return true;
+                    case "u64":
+                        result = BitConverter.ToUInt64(Utils.HexToByteArray(resultString));
+                        return true;
+                    case "T::AccountId":
+                        result = new AccountId(resultString);
+                        return true;
+                    default:
+                        throw new Exception($"Unknown type '{value}' for result '{resultString}'!");
+                }
+            } 
+            else
+            {
+                throw new Exception($"Module '{v1}' or Item '{v2}' missing in metadata of '{md.Origin}'!");
+            }
+        }
+
+        internal string RequestAsync(string methode)
         {
 
             var task = jsonRpc.InvokeWithCancellationAsync<string>(methode, null, cts.Token);
+            task.Wait();
+            return task.Result;
+
+        }
+
+        internal string RequestWithParamtersAsync(string methode, string parameter)
+        {
+
+            var task = jsonRpc.InvokeWithParameterObjectAsync<string>(methode, new object[] { parameter }, cts.Token);
             task.Wait();
             return task.Result;
 

@@ -6,8 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HashDepot" Version="2.0.3" />
+    <PackageReference Include="Blake2Core" Version="1.0.0" />
+    <PackageReference Include="SimpleBase" Version="3.0.1" />
     <PackageReference Include="StreamJsonRpc" Version="2.5.46" />
+    <PackageReference Include="System.Data.HashFunction.xxHash" Version="2.0.0" />
   </ItemGroup>
 
 </Project>
